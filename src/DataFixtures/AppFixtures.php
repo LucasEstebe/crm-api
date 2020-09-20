@@ -47,10 +47,11 @@ class AppFixtures extends Fixture
 
             for ($c = 0; $c < mt_rand(5,20); $c++){
                 $customer = new Customer();
-                $customer->setFirstName($faker->firstName);
-                $customer->setLastName($faker->lastName);
-                $customer->setCompany($faker->company);
-                $customer->setEmail($faker->email);
+                $customer->setFirstName($faker->firstName)
+                    ->setLastName($faker->lastName)
+                    ->setCompany($faker->company)
+                    ->setEmail($faker->email)
+                    ->setUser($user);
 
                 $manager->persist($customer);
 
