@@ -9,6 +9,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use App\Repository\InvoiceRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Controller\InvoiceIncrementationController;
 
 /**
  * @ORM\Entity(repositoryClass=InvoiceRepository::class)
@@ -17,11 +18,27 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     "pagination_items_per_page"=20,
  *     "order"={"amount":"desc"}
  *     },
+ *     subresourceOperations={
+            "api_customers_invoices_get_subresource"={
+ *              "normalization_context"={"groups"={"invoices_subresource"}}
+ *            },
+ *     },
+ *     itemOperations={
+ *                  "GET","PUT","DELETE",
+ *                  "increment"={
+ *                      "method"="post",
+ *                      "path"="/invoices/{id}/increment",
+ *                      "controller"=InvoiceIncrementationController::class,
+ *                      "openapi_context"={
+                            "summary"="Incrémente le chrono d'une facture donnée"
+ *                      },
+ *                      },
+ *     },
  *     normalizationContext={
  *          "groups"={
                 "invoices_read"
- *          }
- *     }
+ *          },
+ *     },
  * )
  * @ApiFilter(OrderFilter::class, properties={"amount","sentAt"})
  * @ApiFilter(SearchFilter::class, properties={
@@ -35,25 +52,25 @@ class Invoice
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"invoices_read", "customers_read"})
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"invoices_read", "customers_read"})
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $amount;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"invoices_read", "customers_read"})
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $sentAt;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"invoices_read", "customers_read"})
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $status;
 
@@ -66,13 +83,13 @@ class Invoice
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"invoices_read", "customers_read"})
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $chrono;
 
     /**
      * @return User
-     * @Groups({"invoices_read"})
+     * @Groups({"invoices_read", "invoices_subresource"})
      */
     public function getUser() : User {
         return $this->customer->getUser();

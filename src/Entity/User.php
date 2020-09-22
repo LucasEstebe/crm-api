@@ -20,7 +20,7 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"invoices_read", "customers_read"})
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $id;
 
@@ -43,13 +43,13 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"invoices_read", "customers_read"})
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"invoices_read", "customers_read"})
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $lastName;
 
