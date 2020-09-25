@@ -15,7 +15,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ApiResource
+ * @ApiResource(
+ *     normalizationContext={"groups"={"users_read}}
+ * )
  * @UniqueEntity("email", message="Cet email est déjà utilisé")
  */
 class User implements UserInterface
@@ -24,13 +26,13 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
+     * @Groups({"users_read", "invoices_read", "customers_read", "invoices_subresource"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"invoices_read", "customers_read"})
+     * @Groups({"users_read","invoices_read", "customers_read"})
      * @Assert\NotBlank(message="l'email doit être renseigné")
      * @Assert\Email (message="l'adresse email doit avoir un format valide")
      */
@@ -50,7 +52,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
+     * @Groups({"users_read","invoices_read", "customers_read", "invoices_subresource"})
      * @Assert\NotBlank (message="le prenom est obligatoire")
      * @Assert\Length(min="3", minMessage="min 3 catactères", max="255", maxMessage="max 255 caractères")
      */
@@ -58,7 +60,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
+     * @Groups({"users_read","invoices_read", "customers_read", "invoices_subresource"})
      * @Assert\NotBlank (message="le nom est obligatoire")
      * @Assert\Length(min="3", minMessage="min 3 catactères", max="255", maxMessage="max 255 caractères")
      */
