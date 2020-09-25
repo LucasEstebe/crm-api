@@ -16,7 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ApiResource(
- *     normalizationContext={"groups"={"users_read}}
+ *     normalizationContext={"groups"={"users_read"}}
  * )
  * @UniqueEntity("email", message="Cet email est déjà utilisé")
  */
