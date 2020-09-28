@@ -1,5 +1,6 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import axios from 'axios';
+import {Pagination} from "../components/Pagination";
 
 export const CustomersPage = (props) => {
     const [customers, setCustomers] = useState([]);
@@ -33,21 +34,14 @@ export const CustomersPage = (props) => {
     }
 
     const itemsPerPage = 10;
-    const pagesCount = Math.ceil(customers.length / itemsPerPage);
-    const pages = [];
 
-    for (let i = 1; i <= pagesCount; i++){
-        pages.push(i);
-    }
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
     }
 
-    //start + itemsPerPage
-    const start = currentPage * itemsPerPage - itemsPerPage; // 3 * 10 - 10 = 20
-    const paginatedCustomers = customers.slice(start, start + itemsPerPage)
 
+    const paginatedCustomers = Pagination.getData(customers, currentPage, itemsPerPage);
 
     return (<Fragment>
         <h1>Liste des clients</h1>
@@ -60,7 +54,7 @@ export const CustomersPage = (props) => {
                 <th>Entreprise</th>
                 <th className={"text-center"}>Factures</th>
                 <th className={"text-center"}>Montant total</th>
-                <th></th>
+                <th/>
             </tr>
             </thead>
             <tbody>
@@ -89,20 +83,6 @@ export const CustomersPage = (props) => {
             )}
             </tbody>
         </table>
-        <div>
-            <ul className="pagination pagination-sm">
-                <li className={"page-item" + (currentPage === 1 && " disabled")}>
-                    <button className="page-link" onClick={() => handlePageChange(currentPage-1)}>&laquo;</button>
-                </li>
-                {pages.map(page =>
-                    <li  key={page} className={"page-item" + (currentPage === page && " active")}>
-                        <button className="page-link" onClick={() => handlePageChange(page)}>{page}</button>
-                    </li>
-                )}
-                <li className={"page-item" + (currentPage === pagesCount && " disabled")}>
-                    <button className="page-link" onClick={() => handlePageChange(currentPage+1)}>&raquo;</button>
-                </li>
-            </ul>
-        </div>
+        <Pagination currentPage={currentPage} itemsPerPage={itemsPerPage} length={customers.length} onPageChange={handlePageChange}/>
     </Fragment>);
 }
