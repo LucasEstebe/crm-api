@@ -3,6 +3,7 @@ import axios from 'axios';
 
 export const CustomersPage = (props) => {
     const [customers, setCustomers] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
 
 
     useEffect(() =>{
@@ -31,6 +32,22 @@ export const CustomersPage = (props) => {
             .catch(error => console.log(error.response))
     }
 
+    const itemsPerPage = 10;
+    const pagesCount = Math.ceil(customers.length / itemsPerPage);
+    const pages = [];
+
+    for (let i = 1; i <= pagesCount; i++){
+        pages.push(i);
+    }
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    }
+
+    //start + itemsPerPage
+    const start = currentPage * itemsPerPage - itemsPerPage; // 3 * 10 - 10 = 20
+    const paginatedCustomers = customers.slice(start, start + itemsPerPage)
+
 
     return (<Fragment>
         <h1>Liste des clients</h1>
@@ -47,7 +64,7 @@ export const CustomersPage = (props) => {
             </tr>
             </thead>
             <tbody>
-            {customers.map(customer =>
+            {paginatedCustomers.map(customer =>
                 <tr key={customer.id}>
                     <td>{customer.id}</td>
                     <td>
@@ -74,26 +91,16 @@ export const CustomersPage = (props) => {
         </table>
         <div>
             <ul className="pagination pagination-sm">
-                <li className="page-item disabled">
-                    <a className="page-link" href="#">&laquo;</a>
+                <li className={"page-item" + (currentPage === 1 && " disabled")}>
+                    <button className="page-link" onClick={() => handlePageChange(currentPage-1)}>&laquo;</button>
                 </li>
-                <li className="page-item active">
-                    <a className="page-link" href="#">1</a>
-                </li>
-                <li className="page-item">
-                    <a className="page-link" href="#">2</a>
-                </li>
-                <li className="page-item">
-                    <a className="page-link" href="#">3</a>
-                </li>
-                <li className="page-item">
-                    <a className="page-link" href="#">4</a>
-                </li>
-                <li className="page-item">
-                    <a className="page-link" href="#">5</a>
-                </li>
-                <li className="page-item">
-                    <a className="page-link" href="#">&raquo;</a>
+                {pages.map(page =>
+                    <li  key={page} className={"page-item" + (currentPage === page && " active")}>
+                        <button className="page-link" onClick={() => handlePageChange(page)}>{page}</button>
+                    </li>
+                )}
+                <li className={"page-item" + (currentPage === pagesCount && " disabled")}>
+                    <button className="page-link" onClick={() => handlePageChange(currentPage+1)}>&raquo;</button>
                 </li>
             </ul>
         </div>
