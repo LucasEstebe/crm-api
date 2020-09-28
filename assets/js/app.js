@@ -15,7 +15,6 @@ import '../css/app.css';
 import {Navbar} from "./components/Navbar";
 import {HomePage} from "./pages/HomePage";
 import {CustomersPage} from "./pages/CustomersPage";
-import {CustomersPageWithPagination} from "./pages/CustomersPageWithPagination";
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
 // import $ from 'jquery';
@@ -25,7 +24,7 @@ const App = () =>{
             <main className={"container mt-5"}>
                 <Switch>
                     <Route exact={true} path={"/"} component={HomePage}/>
-                    <Route path={"/customers"} component={CustomersPageWithPagination}/>
+                    <Route path={"/customers"} component={CustomersPage}/>
                 </Switch>
             </main>
             </HashRouter>
