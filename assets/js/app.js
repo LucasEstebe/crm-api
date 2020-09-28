@@ -4,19 +4,30 @@
  * We recommend including the built version of this JavaScript file
  * (and its CSS file) in your base layout (base.html.twig).
  */
-
-
-import React from 'react';
+import React, {Fragment} from 'react';
 import ReactDom from 'react-dom';
-
+import {HashRouter, Switch, Route  } from "react-router-dom";
 
 // any CSS you import will output into a single css file (app.css in this case)
 import '../css/app.css';
 
+// Components
+import {Navbar} from "./components/Navbar";
+import {HomePage} from "./pages/HomePage";
+import {CustomersPage} from "./pages/CustomersPage";
+
 // Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
 // import $ from 'jquery';
 const App = () =>{
-    return <h1>Bonjour à tous!</h1>;
+    return <HashRouter>
+            <Navbar/>
+            <main className={"container mt-5"}>
+                <Switch>
+                    <Route exact={true} path={"/"} component={HomePage}/>
+                    <Route path={"/customers"} component={CustomersPage}/>
+                </Switch>
+            </main>
+            </HashRouter>
 };
 
 const rootElement = document.querySelector('#app');
