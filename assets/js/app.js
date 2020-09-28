@@ -15,6 +15,7 @@ import '../css/app.css';
 import {Navbar} from "./components/Navbar";
 import {HomePage} from "./pages/HomePage";
 import {CustomersPage} from "./pages/CustomersPage";
+import {InvoicesPage} from "./pages/InvoicesPage";
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
 // import $ from 'jquery';
@@ -25,6 +26,7 @@ const App = () =>{
                 <Switch>
                     <Route exact={true} path={"/"} component={HomePage}/>
                     <Route path={"/customers"} component={CustomersPage}/>
+                    <Route path={"/invoices"} component={InvoicesPage}/>
                 </Switch>
             </main>
             </HashRouter>

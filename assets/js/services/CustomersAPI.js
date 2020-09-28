@@ -7,7 +7,7 @@ async function findAll(){
 }
 
 function deleteCustomer(id){
-    return
+    return  axios.delete("http://127.0.0.1:8000/api/customers/"+ id)
 }
 
 export default {
