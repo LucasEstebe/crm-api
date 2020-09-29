@@ -18,17 +18,17 @@ import {CustomersPage} from "./pages/CustomersPage";
 import {InvoicesPage} from "./pages/InvoicesPage";
 import {LoginPage} from "./pages/LoginPage";
 import PrivateRoute from "./components/PrivateRoute";
-import authAPI from "./services/authAPI";
+import AuthAPI from "./services/AuthAPI";
 
 // Context
 import AuthContext from "./context/AuthContext";
 
-authAPI.setup();
+AuthAPI.setup();
 
 
 
 const App = () =>{
-    const [isAuthenticated, setIsAuthenticated] = useState(authAPI.isAuthenticated());
+    const [isAuthenticated, setIsAuthenticated] = useState(AuthAPI.isAuthenticated());
 
     const NavbarWithRouter = withRouter(Navbar);
 

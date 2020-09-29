@@ -1,6 +1,7 @@
 import React, {Fragment, useContext, useState} from 'react';
-import authAPI from "../services/authAPI";
+import AuthAPI from "../services/AuthAPI";
 import AuthContext from "../context/AuthContext";
+import Field from "../components/forms/Field";
 
 export const LoginPage = ({history}) => {
 
@@ -23,7 +24,7 @@ export const LoginPage = ({history}) => {
     const handleSubmit = async event =>{
         event.preventDefault();
         try {
-            await authAPI.authenticate(credentials);
+            await AuthAPI.authenticate(credentials);
             setError("");
             setIsAuthenticated(true);
             history.replace("/customers");
@@ -34,29 +35,21 @@ export const LoginPage = ({history}) => {
 
     return <Fragment>
         <form onSubmit={handleSubmit}>
-            <div className="form-group">
-                <label htmlFor={"username"}>Email address</label>
-                <input type="username"
-                       className={"form-control " + (error && "is-invalid")}
-                       name={"username"}
-                       id={"username"}
-                       value={credentials.username}
-                       onChange={handleChange}
-                       placeholder="Adresse email de connexion"/>
-                {error &&
-                    <p className={"invalid-feedback"}>{error}</p>
-                }
-            </div>
-            <div className="form-group">
-                <label htmlFor={"password"}>Password</label>
-                <input type="password"
-                       id={"password"}
-                       name={"password"}
-                       className="form-control"
-                       value={credentials.password}
-                       onChange={handleChange}
-                       placeholder="Password"/>
-            </div>
+            <Field label={"Email address"}
+                   type={"email"}
+                   name={"username"}
+                   placeholder={"Adresse email de connexion"}
+                   value={credentials.username}
+                   onChange={handleChange}
+                   error={error}
+            />
+            <Field
+                name={"password"}
+                label={"Password"}
+                value={credentials.password}
+                onChange={handleChange}
+                type={"password"}
+            />
             <div className={"form-group"}>
                 <button type={"submit"} className={"btn btn-success"}>Je me connecte</button>
             </div>

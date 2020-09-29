@@ -25,14 +25,17 @@ function authenticate(credentials){
         })
 }
 
+// Add token to axios default header
 function setAxiosToken(token){
     axios.defaults.headers["Authorization"] = "Bearer " + token;
 }
 
+// On page reload we add axios token if authenticated
 function setup(){
     if (isAuthenticated()){setAxiosToken(window.localStorage.getItem("authToken"))}
 }
 
+// Remove token from local storage and axios header
 function logout(){
     window.localStorage.removeItem("authToken");
     delete axios.defaults.headers["Authorization"];
