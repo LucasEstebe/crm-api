@@ -1,34 +1,51 @@
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {Fragment, useContext, useState} from 'react';
+import authAPI from "../services/authAPI";
+import AuthContext from "../context/AuthContext";
 
-export const LoginPage = (props) => {
+export const LoginPage = ({history}) => {
+
+    const { setIsAuthenticated } = useContext(AuthContext);
+
     const [credentials, setCredentials] = useState({
-        email: "",
+        username: "",
         password: ""
     })
 
-    const handleChange = event => {
-        const value = event.currentTarget.value;
-        const name = event.currentTarget.name;
+    const [error, setError] = useState("");
 
+    //Gestion des champs
+    const handleChange = ({currentTarget}) => {
+        const {value, name} = currentTarget;
         setCredentials({...credentials, [name]: value})
     }
 
-    const handleSubmit = event =>{
+    // Gestion du submit
+    const handleSubmit = async event =>{
         event.preventDefault();
-        console.log(credentials);
+        try {
+            await authAPI.authenticate(credentials);
+            setError("");
+            setIsAuthenticated(true);
+            history.replace("/customers");
+        }catch (e) {
+            setError("Invalid email or password")
+        }
     }
 
     return <Fragment>
         <form onSubmit={handleSubmit}>
             <div className="form-group">
-                <label htmlFor={"email"}>Email address</label>
-                <input type="email"
-                       className="form-control"
-                       name={"email"}
-                       id={"email"}
-                       value={credentials.email}
+                <label htmlFor={"username"}>Email address</label>
+                <input type="username"
+                       className={"form-control " + (error && "is-invalid")}
+                       name={"username"}
+                       id={"username"}
+                       value={credentials.username}
                        onChange={handleChange}
                        placeholder="Adresse email de connexion"/>
+                {error &&
+                    <p className={"invalid-feedback"}>{error}</p>
+                }
             </div>
             <div className="form-group">
                 <label htmlFor={"password"}>Password</label>
