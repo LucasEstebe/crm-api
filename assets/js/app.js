@@ -4,9 +4,9 @@
  * We recommend including the built version of this JavaScript file
  * (and its CSS file) in your base layout (base.html.twig).
  */
-import React, {Fragment, useContext, useState} from 'react';
+import React, {useState} from 'react';
 import ReactDom from 'react-dom';
-import {HashRouter, Switch, Route, withRouter, Redirect  } from "react-router-dom";
+import {HashRouter, Route, Switch, withRouter} from "react-router-dom";
 
 // any CSS you import will output into a single css file (app.css in this case)
 import '../css/app.css';
@@ -17,6 +17,7 @@ import {HomePage} from "./pages/HomePage";
 import {CustomersPage} from "./pages/CustomersPage";
 import {InvoicesPage} from "./pages/InvoicesPage";
 import {LoginPage} from "./pages/LoginPage";
+import PrivateRoute from "./components/PrivateRoute";
 import authAPI from "./services/authAPI";
 
 // Context
@@ -24,23 +25,18 @@ import AuthContext from "./context/AuthContext";
 
 authAPI.setup();
 
-const PrivateRoute = ({path, component}) => {
-    const {isAuthenticated} = useContext(AuthContext);
-    return isAuthenticated ? <Route path={path} component={component}/> : <Redirect to={"/login"}/>
-}
+
 
 const App = () =>{
     const [isAuthenticated, setIsAuthenticated] = useState(authAPI.isAuthenticated());
 
-    const contextValue = {
-        isAuthenticated,
-        setIsAuthenticated
-    }
-
     const NavbarWithRouter = withRouter(Navbar);
 
     return (
-        <AuthContext.Provider value={contextValue}>
+        <AuthContext.Provider value={{
+            isAuthenticated,
+            setIsAuthenticated
+        }}>
         <HashRouter>
             <NavbarWithRouter/>
             <main className={"container mt-5"}>
