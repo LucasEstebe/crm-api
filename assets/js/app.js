@@ -23,6 +23,7 @@ import AuthAPI from "./services/AuthAPI";
 // Context
 import AuthContext from "./context/AuthContext";
 import {CustomerPage} from "./pages/CustomerPage";
+import {InvoiceForm} from "./pages/InvoiceForm";
 
 AuthAPI.setup();
 
@@ -48,7 +49,7 @@ const App = () =>{
                     <PrivateRoute path={"/customers/:id"} component={CustomerPage}/>
                     <PrivateRoute path={"/customers"} component={CustomersPage} />
 
-
+                    <PrivateRoute path={"/invoices/:id"} component={InvoiceForm}/>
                     <PrivateRoute path={"/invoices"} component={InvoicesPage}/>
 
                     <Route path={'/login'} render={props =>

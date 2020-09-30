@@ -1,11 +1,13 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import Field from "../components/forms/Field";
 import {Link} from "react-router-dom";
 import CustomersAPI from "../services/CustomersAPI";
 import axios from "axios";
 
 
-export const CustomerPage = props => {
+export const CustomerPage = ({history, match}) => {
+    const {id = "new"}= match.params;
+
     const [customer, setCustomer] = useState({
         lastName: "",
         firstName: "",
@@ -19,31 +21,68 @@ export const CustomerPage = props => {
         firstName: "",
         email: "",
         company: ""
+
     })
 
-    //Gestion des champs
+    const [editing, setEditing] = useState(false);
+
+    // Get a customer by id
+    const fetchCustomer = async id =>{
+        try {
+            const {firstName, lastName, email, company } = CustomersAPI.find(id);
+            setCustomer({firstName,lastName,email,company});
+        }catch (error) {
+            history.replace("/customers");
+        } //TODO notification
+
+    }
+
+    // Loading customer if necessary
+    useEffect(() =>{
+            if (id !== "new"){
+                setEditing(true);
+                fetchCustomer(id);
+            }
+        },[id])
+
+
+    //Gestion des changement dans les inputs
     const handleChange = ({currentTarget}) => {
         const {value, name} = currentTarget;
         setCustomer({...customer, [name]: value})
     }
 
+    //Gestion du submit
     const handleSubmit = async e => {
         e.preventDefault();
         try {
-           const response =  await axios.post("http://127.0.0.1:8000/api/customers", customer)
+            if (editing){
+               await CustomersAPI.update(id, customer);
+                //TODO flash notification
+            } else{
+                await CustomersAPI.create(customer);
+                //TODO flash notification
+                history.replace("/customers");
+            }
+            //TODO flash notification
             setErrors({});
-        } catch (error) {if(error.response.data.violations){
-            const apiErrors = {};
-            error.response.data.violations.map(v => {
-                apiErrors[v.propertyPath] = v.message;
+        }catch ({response}) {
+            const {violations} = response.data;
+
+            if(violations){
+                const apiErrors = {};
+                violations.map(({propertyPath, message}) => {
+                    apiErrors[propertyPath] = message;
             });
+
             setErrors(apiErrors);
+            //TODO flash notification
         }}
     }
 
     return (
         <Fragment>
-            <h1>Création d'un client</h1>
+            {(!editing && <h1>Création d'un client</h1>) || (<h1>Modification d'un client</h1>)}
 
             <form onSubmit={handleSubmit}>
                 <Field name={"lastName"}
